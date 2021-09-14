@@ -1,6 +1,7 @@
 package com.company.restaurant;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.Period;
 
 public class MenuItem {
     private String category;
@@ -8,7 +9,7 @@ public class MenuItem {
     private Double price;
     private String description;
     private Boolean isNew;
-    private Date updatedOn = new Date();
+    private LocalDate updatedOn = LocalDate.now();
 
     public MenuItem() {
     }
@@ -18,7 +19,6 @@ public class MenuItem {
         this.name = aName;
         this.price = aPrice;
         this.description = aDescription;
-        this.isNew = true;
     }
 
     public String getCategory() {
@@ -53,19 +53,39 @@ public class MenuItem {
         this.description = description;
     }
 
-    public Boolean getNew() {
-        return isNew;
-    }
-
-    public void setNew(Boolean aNew) {
-        isNew = aNew;
-    }
-
-    public Date getUpdatedOn() {
+    public LocalDate getUpdatedOn() {
         return updatedOn;
     }
 
-    public void setUpdatedOn(Date updatedOn) {
-        this.updatedOn = updatedOn;
+    // #2 a way to tell if a menu item is "new", or created within the last 3 days.
+    public boolean isMenuItemNew() {
+        Period period = Period.between(LocalDate.now(), this.updatedOn);
+        return period.getDays() < 3;
+    }
+
+    // #4 a way to print out both a menu item and an entire menu
+    // This assists w/setting up how menuItems displays when printed.
+    @Override
+    public String toString() {
+        return "CATEGORY: " + this.category + "NAME: " + this.name + "PRICE: " + this.price + "DESCRIPTION: " + this.description;
+    }
+
+    // #5 a way to determine whether or not 2 menu items are =
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+
+        if (o == null) {
+            return false;
+        }
+
+        if (o.getClass() != getClass()) {
+            return false;
+        }
+
+        MenuItem item = (MenuItem) o;
+        return item.getName() == getName();
     }
 }
